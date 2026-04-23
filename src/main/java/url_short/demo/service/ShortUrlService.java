@@ -28,6 +28,14 @@ public class ShortUrlService {
     }
 
     public Optional<ShortUrlEntity> findByShortCode(String shortCode) {
-        return shortUrlRepository.findByShortCode(shortCode);
+        Optional<ShortUrlEntity> optional = shortUrlRepository.findByShortCode(shortCode);
+
+        if (optional.isPresent()) {
+            ShortUrlEntity shortUrl = optional.get();
+            shortUrl.setClickCount(shortUrl.getClickCount() + 1);
+            shortUrlRepository.save(shortUrl);
+        }
+
+        return optional;
     }
 }
